@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Absensi Tamu</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow-md text-center w-96">
+    <h1 class="text-2xl font-bold mb-4">Selamat Datang</h1>
+    <p class="text-gray-700 mb-6">Jumlah tamu yang hadir:</p>
+    <div id="counter" class="text-4xl font-bold mb-6">0</div>
+    <button id="hadirButton" class="bg-green-500 text-white px-6 py-2 rounded text-lg hover:bg-green-600 transition">Saya Hadir</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+  <script>
+    // Konfigurasi Firebase kamu (GANTI DENGAN PUNYAMU SENDIRI)
+   const firebaseConfig = {
+  apiKey: "AIza....",
+  authDomain: "absensi-tamu.firebaseapp.com",
+  databaseURL: "https://absensi-tamu-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "absensi-tamu",
+  storageBucket: "absensi-tamu.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abc123"
+};
+
+    };
+
+    // Inisialisasi Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const counterRef = db.ref('counter');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const counterEl = document.getElementById('counter');
+      const hadirBtn = document.getElementById('hadirButton');
+
+      // Baca data real-time
+      counterRef.on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        counterEl.textContent = count;
+      });
+
+      // Tambah jumlah jika tombol diklik
+      hadirBtn.addEventListener('click', () => {
+        counterRef.transaction((current) => (current || 0) + 1);
+      });
+    });
+  </script>
+</body>
+</html>
